@@ -17,7 +17,19 @@ export default function Code(props: ICode) {
   useEffect(() => {
     if (data && data.agent_data) {
       let total = data.agent_data.length;
-      let count = data.agent_data.filter((a: any) => a[dimension + "_" + category] && a[dimension + "_" + category].includes(name)).length;
+      let count = data.agent_data.filter((a: any) => a[dimension + "_" + category] && a[dimension + "_" + category].split(', ').includes(name)).length;
+      if(dimension=="Infrastructure"){
+        total = data.references.length;
+        count = data.agent_data.filter((a: any) => a[dimension + "_" + category] && a[dimension + "_" + category].split(', ').includes(name)).reduce((p:any,c:any)=>{
+          if(p.includes(c["ID"])){
+            return p
+          }
+          else{
+            p.push(c["ID"])
+            return p
+          }
+        },[]).length
+      }
       setCodePercentage(Math.round((count / total) * 1000) / 10);
 
     }
@@ -25,7 +37,20 @@ export default function Code(props: ICode) {
   useEffect(() => {
     if (filteredAgents && filteredAgents.length) {
       let total = data.agent_data.length;
-      let count = filteredAgents.filter((a: any) => a[dimension + "_" + category] && a[dimension + "_" + category].includes(name)).length;
+      let count = filteredAgents.filter((a: any) => a[dimension + "_" + category] && a[dimension + "_" + category].split(', ').includes(name)).length;
+      if(dimension=="Infrastructure"){
+        total = data.references.length;
+        count = data.agent_data.filter((a: any) => a[dimension + "_" + category] && a[dimension + "_" + category].split(', ').includes(name)).reduce((p:any,c:any)=>{
+          if(p.includes(c["ID"])){
+            return p
+
+          }
+          else{
+            p.push(c["ID"])
+            return p
+          }
+        },[]).length
+      }
       setCodePercentageFiltered(Math.round((count / total) * 1000) / 10);
 
     }
@@ -75,3 +100,4 @@ export default function Code(props: ICode) {
 
   );
 }
+
