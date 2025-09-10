@@ -33,8 +33,16 @@ export const ProtectionContextProvider = ({ children }: { children: ReactNode })
     const [a, setA] = useState<any>()
     const [r, setR] = useState<any>()
     const [d, setD] = useState<any>()
+    const [testUrlParam, setTestUrlParam] = useState<boolean>(false)
 
-
+    useEffect(()=>{
+        let params = new URLSearchParams(document.location.search);
+        let passphrase = params.get("p");
+        if(passphrase!==null){
+            handlePWSubmit(passphrase)
+        }
+        setTestUrlParam(true)
+    },[])
 
 
     const handlePWSubmit = useCallback(async (pass?: string) => {
@@ -88,14 +96,14 @@ export const ProtectionContextProvider = ({ children }: { children: ReactNode })
         <ProtectionContext.Provider value={{
             a, r,d
         }}>
-            {!pwCorrect &&
+            {(!pwCorrect && testUrlParam) &&
                 <>
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', heigth: '100vh', width: '100vw' }}>
                         <Box sx={{ flex: 1 }}></Box>
                         <Box sx={{color:'black', mb:1}}>
-                            Please enter the passphrase provided in the paper:
+                            Please use the correct link.
                         </Box>
-                        <TextField
+                        {/* <TextField
                             value={pw}
                             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                                 setPW(event.target.value);
@@ -105,7 +113,7 @@ export const ProtectionContextProvider = ({ children }: { children: ReactNode })
                             onClick={() => {
                                 handlePWSubmit()
                             }}
-                        >Open</Button>
+                        >Open</Button> */}
                         <Box sx={{ flex: 1 }}></Box>
                     </Box>
                 </>
