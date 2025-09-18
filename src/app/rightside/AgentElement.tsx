@@ -8,6 +8,7 @@ import { AgentIcon } from './Icons/AgentIcon';
 import { HumanIcon } from './Icons/HumanIcon';
 import { WizardIcon } from './Icons/WizardIcon';
 import Checkbox from '@mui/material/Checkbox';
+import { PaperDescription } from './PaperDescription';
 
 interface IAgentElementProps {
     // Define any props if needed in the future
@@ -19,13 +20,13 @@ interface IAgentElementProps {
 
 export const AgentElement = (props: IAgentElementProps) => {
     const { name, attributes, notEditable, borderColor } = props;
-    const { addOrRemoveSelectedAgents, selectedAgents } = useDataContext();
+    const { addOrRemoveSelectedAgents, selectedAgents, data } = useDataContext();
     const [checked, setChecked] = React.useState(false);
 
     useEffect(() => {
         if (selectedAgents && selectedAgents.length && attributes) {
             let isSelected = selectedAgents.find((a: any) => a.agentID == attributes.agentID);
-            setChecked(isSelected);
+            setChecked(isSelected?isSelected:false);
         }
         else {
             setChecked(false);
@@ -34,18 +35,29 @@ export const AgentElement = (props: IAgentElementProps) => {
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         // setChecked(event.target.checked);
-        console.log("Toggling agent: ", attributes.agentID, event.target.checked);
+     
         addOrRemoveSelectedAgents(attributes.agentID, attributes);
     };
     const handleClick = () => {
         // setChecked(event.target.checked);
-        console.log("Toggling agent: ", attributes.agentID);
+  
         addOrRemoveSelectedAgents(attributes.agentID, attributes);
     };
 
     return (
 
-        <Box sx={{ width: "100%", p: 1, border: "2px solid " + (borderColor ? borderColor : 'black'), backgroundColor: "#D9D9D9", borderRadius: 3, mt: 1, display: 'flex', height: 50, flexDirection: 'row' }}
+        <Box sx={{
+            width: "100%", p: 1, border: "2px solid " + (borderColor ? borderColor : '#b3b3b3'),
+            backgroundColor: borderColor ? "rgb(from " + borderColor + " r g b / .2)" : "rgb(from " + "#b3b3b3" + " r g b / .2)",
+
+            borderRadius: 3, mt: 1, display: 'flex', height: 50, flexDirection: 'row', cursor: 'pointer'
+        }}
+            onClick={(e) => {
+                e.stopPropagation();
+                if (notEditable !== true) {
+                    handleClick();
+                }
+            }}
         // onMouseOver={(e) => {
         //     e.stopPropagation();
         //     setHoveredAgent({ hovered: true, attributes: attributes })
@@ -62,7 +74,10 @@ export const AgentElement = (props: IAgentElementProps) => {
                     checked={checked}
                     disabled={selectedAgents.length >= 6 && !checked}
                     // onChange={handleChange}
-                    onClick={handleClick}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        handleClick();
+                    }}
 
                 />
             }
@@ -88,16 +103,25 @@ export const AgentElement = (props: IAgentElementProps) => {
                 <Box sx={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
                     <Box sx={{ flex: 1 }}></Box>
 
-                    {attributes && attributes["Configuration + Logic_Role"] && (<Typography  component="div" sx={{ fontWeight: 700, whiteSpace: 'nowrap',textOverflow:'ellipsis', maxWidth: 300,
-  overflow: 'hidden',ml:1 }}>
+                    {attributes && attributes["Configuration + Logic_Role"] && (<Typography component="div" sx={{
+                        fontWeight: 700, whiteSpace: 'nowrap', textOverflow: 'ellipsis', maxWidth: 300,
+                        overflow: 'hidden', ml: 1
+                    }}>
                         {attributes["Configuration + Logic_Role"]}
                     </Typography>)}
 
 
                     <Box sx={{ flex: 1 }}></Box>
 
+
                 </Box>
             </Box>
+            {
+                (notEditable === true) &&
+                <PaperDescription title={data.references.find((el: any) => el["paperID"] == String(attributes["ID"])).title} authors={data.references.find((el: any) => el["paperID"] == String(attributes["ID"])).author} url={data.references.find((el: any) => el["paperID"] == String(attributes["ID"])).url}
+                year={data.references.find((el: any) => el["paperID"] == String(attributes["ID"])).year}
+                ></PaperDescription>
+            }
         </Box>
     )
 }
