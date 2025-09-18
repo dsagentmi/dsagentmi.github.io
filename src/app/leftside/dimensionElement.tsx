@@ -10,7 +10,7 @@ import DimensionTriangle from "./DimensionTriangle";
 
 export default function Dimension(props:IDimension) {
     const { name, color_name, categories } = props;
-    console.log(name);
+
     return (
     <Box key={"dim_"+name} sx={{ flex:1, p: 0.5 }}>
 
@@ -23,7 +23,7 @@ export default function Dimension(props:IDimension) {
         </Box>
         <Box sx={{ flexDirection: 'row', display: 'flex', flexWrap: 'wrap' }}>
         {categories.map((cat,idx) => (
-            <Category {...{...cat, dimension:name, color_name: color_name, key:name+"_cat_" + idx}} ></Category>
+            <Category  {...{...cat, dimension:name, color_name: color_name, }} ></Category>
         ))}
         {/* <Category></Category> */}
         </Box>
