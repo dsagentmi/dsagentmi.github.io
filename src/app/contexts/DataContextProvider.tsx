@@ -53,7 +53,7 @@ export const DataContextProvider = ({ children }: { children: ReactNode }) => {
     ]
 
     useEffect(() => {
-        console.log("Data updated:", data);
+        
         if (data && data.agent_data) {
 
             setFilteredAgents(data.agent_data)
@@ -64,7 +64,7 @@ export const DataContextProvider = ({ children }: { children: ReactNode }) => {
 
         let updatedSelectedAgents = [...selectedAgents];
         const agentKey = updatedSelectedAgents.findIndex(key => key?.agentID == agentID);
-        console.log("Agent key:", agentKey);
+        
         if (agentKey !== -1) {
             // If agent is already selected, remove it
 
@@ -76,10 +76,10 @@ export const DataContextProvider = ({ children }: { children: ReactNode }) => {
 
             if (updatedSelectedAgents.length < 6) {
                 updatedSelectedAgents = [...updatedSelectedAgents, { agentID: agentID, attributes: attributes, color: unusedColors[0] }];
-                console.log("Updated selected agents:", updatedSelectedAgents);
+                
             }
             else {
-                console.log("Cannot select more than 6 agents");
+                
             }
         }
         setSelectedAgents([...updatedSelectedAgents]);
@@ -183,4 +183,5 @@ export const useDataContext = () => {
         throw new Error("useDataContext must be used within a DataContextProvider");
     }
     return context;
+
 };
