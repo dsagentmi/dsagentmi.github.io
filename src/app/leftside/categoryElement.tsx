@@ -9,15 +9,15 @@ import { ds_colors } from "../configurations/colors";
 
 export default function Category(props: ICategory) {
   const { name, codes, dimension, color_name } = props;
-  console.log(name);
+  
   return (
-    <Box sx={{  color: dimension=="Infrastructure"?'white':'black', p:0.5,  width:200 }}>
-      <Box sx={{ fontWeight: 'bold', backgroundColor: ds_colors[color_name], p:1 }}>
+    <Box sx={{  color: dimension=="Infrastructure"?'white':'black', p:0.5, pl:0,  width:200 }}>
+      <Box sx={{ fontWeight: 'bold', backgroundColor: ds_colors[color_name], p:1, borderRadius:2, }}>
         {name}
       </Box>
       <Box sx={{ flexDirection: 'column', mt:1, flexWrap: 'wrap', }}>
         {codes.map((code, idx) => (
-          <Code {...{ ...code, dimension: dimension, color_name: color_name, category: name, key: "cat_" + name + idx }} ></Code>
+          <Code key={ "cat_" + name + idx} {...{ ...code, dimension: dimension, color_name: color_name, category: name,  }} ></Code>
         ))}
       </Box>
     </Box>
