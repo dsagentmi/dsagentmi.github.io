@@ -4,6 +4,9 @@ import { Card, CardContent, Typography, Link, Box, Stack, IconButton } from '@mu
 import { AgentElement } from './AgentElement';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { removeLatexCommands } from '../utils/latexPolisher';
+import { useDataContext } from '../contexts/DataContextProvider';
+
 
 interface IPaperElementProps {
     // Define any props if needed in the future
@@ -24,6 +27,7 @@ interface IPaperElementProps {
 const PaperCard = (props: IPaperElementProps) => {
     const { title, author, journal, year, filteredAgentsOfPaper, booktitle,url } = props;
     const [expanded, setExpanded] = React.useState(false);
+    const{selectedAgents} = useDataContext();
 
     const latexBibtextAuthorToTextConverter=(authors:string)=>{
         let splitter = " and\n"
@@ -47,16 +51,16 @@ const PaperCard = (props: IPaperElementProps) => {
 
     return (
 
-        <Card variant="outlined" sx={{ maxWidth: 900, borderRadius: 1, boxShadow: 0 }}>
+        <Card key={"paperCard_"+title} variant="outlined" sx={{  width:"100%", borderRadius: 1, boxShadow: 0 }}>
             <CardContent sx={{ p: 2 }}>
                 <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: 'block' }}>
-                    {journal?journal:booktitle} ({year})
+                    {removeLatexCommands(journal?journal:(booktitle?booktitle:""))} ({year})
                 </Typography>
                 <Typography component="a" href={url} sx={{ color: '#23408e', fontWeight: 700, textDecoration: 'none', fontSize: 13, '&:hover': { textDecoration: 'underline' } }}>
-                    {title}
+                    {removeLatexCommands(title)}
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                    {latexBibtextAuthorToTextConverter(author)}
+                    {removeLatexCommands(latexBibtextAuthorToTextConverter(author))}
                 </Typography>
                 {/* <Typography variant="subtitle2" sx={{ fontWeight: 700, mt: 1, display: 'inline' }}>
                     Abstract:
@@ -64,7 +68,7 @@ const PaperCard = (props: IPaperElementProps) => {
                 <Typography variant="body2" component="span" sx={{ fontStyle: 'italic', ml: 0.5 }}>
                     Detecting similarity between texts is a frequently encountered text mining task. Because the measurement of similarity is typically composed of a number of metrics, and some measures are sensitive to subjective interpretation, a generic detector obtained using machine learning often has difficult...
                 </Typography> */}
-                <Box sx={{ width: '100%', borderBottom: '1px solid lightgray', }}>
+                {/* <Box sx={{ width: '100%', borderBottom: '1px solid lightgray', }}>
 
                     <Box sx={{ height: 1, width: '100%',  mt: 1, mb: 1, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <IconButton size="small" sx={{ p: 0, }} onClick={(e) => {
@@ -90,10 +94,14 @@ const PaperCard = (props: IPaperElementProps) => {
                             </Box>
                         
                     }
-                </Box>
+                </Box> */}
                 <Box>
                     {filteredAgentsOfPaper && filteredAgentsOfPaper.length && (<>
-                        {filteredAgentsOfPaper.map((a:any, i:number) => <AgentElement {...{ name: "agent" + i, attributes: a }}></AgentElement>)}
+                        {filteredAgentsOfPaper.map((a:any, i:number) =>{
+                            const sa= selectedAgents.find((sa:any, idx:number)=>sa.agentID==a.agentID)
+                           return <AgentElement key={"agentEl_"+i} {...{ name: "agent" + i, attributes: a, borderColor:sa?sa.color:undefined}}></AgentElement>
+                        }
+                    )}
                     </>)}
                 </Box>
             </CardContent>
