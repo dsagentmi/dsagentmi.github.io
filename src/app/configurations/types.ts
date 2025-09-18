@@ -4,7 +4,6 @@ export interface ICode {
     definition?: string;
     category: string;
     dimension: string;
-    key: string;
     color_name: string;
 }
 export interface ICategory {
@@ -27,4 +26,5 @@ export interface Ifilter{
     dim:string;
     cat:string;
     code:string;
+
 }
