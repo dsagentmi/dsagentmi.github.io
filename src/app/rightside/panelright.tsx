@@ -28,8 +28,8 @@ export default function PanelRight() {
         </Box>
         {selectedAgents.map((a:any, idx:number) => {
 
-          return <AgentElement {...{
-            name: `Agent ${a.agentID}`, attributes: a.attributes, key: "selected_agent_" + idx, notEditable: true
+          return <AgentElement key={ "selected_agent_" + idx} {...{
+            name: `Agent ${a.agentID}`, attributes: a.attributes,  notEditable: true
             , borderColor: a.color
           }} ></AgentElement>
         }
