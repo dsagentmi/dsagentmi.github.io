@@ -10,10 +10,11 @@ import Category from "./categoryElement";
 import { ds_colors } from "../configurations/colors";
 
 export default function Code(props: ICode) {
-  const { name, category, dimension, key, color_name } = props;
+  const { name, category, dimension, color_name } = props;
   const { addOrRemoveCodeToFilter, data, filteredAgents, selectedAgents } = useDataContext();
   const [codePercentage, setCodePercentage] = useState<number>(100);
   const [codePercentageFiltered, setCodePercentageFiltered] = useState<number>(-1);
+  const [hovered,setHovered] = useState<boolean>(false)
   useEffect(() => {
     if (data && data.agent_data) {
       let total = data.agent_data.length;
@@ -23,6 +24,7 @@ export default function Code(props: ICode) {
         count = data.agent_data.filter((a: any) => a[dimension + "_" + category] && a[dimension + "_" + category].split(', ').includes(name)).reduce((p:any,c:any)=>{
           if(p.includes(c["ID"])){
             return p
+
           }
           else{
             p.push(c["ID"])
@@ -63,15 +65,23 @@ export default function Code(props: ICode) {
 
 
   return (
-    <Box key={key} sx={{
-      flex: 1, color: "black", mt: -0.5, display: 'flex', flexDirection: 'row'
+    <Box key={name} sx={{
+      flex: 1, color: "black", mt: 0, display: 'flex', flexDirection: 'row'
+      
       // border:(hoveredAgent.hovered && hoveredAgent.attributes[dimension + "_" + category] && hoveredAgent.attributes[dimension + "_" + category].includes(name))?"1px solid "+  ds_colors[color_name]:"inherit" 
-    }} onClick={(e) => {
+    }} 
+    onMouseOver={()=>{
+      setHovered(true)
+    }}
+    onMouseOut={()=>{
+      setHovered(false)
+    }}
+    onClick={(e) => {
       e.stopPropagation();
 
 
 
-      console.log("Clicked on code: ", name);
+ 
       addOrRemoveCodeToFilter(name, category, dimension)
     }}>
 
@@ -86,11 +96,13 @@ export default function Code(props: ICode) {
       </Box>
       <Box sx={{ flex: 1, fontSize:13, cursor: 'pointer', }}>
 
-        {name}
+        <Box sx={{fontWeight:hovered?'600':'inherit'}}>
+          {name}
+          </Box>
         <Box sx={{ width: "100%", display: 'flex', flexDirection: 'row' }}>
           <Box sx={{ width: String(codePercentage)+"px", height: 10, backgroundColor: 'gray' }}></Box>
           <Box sx={{ position: "relative", left: -Math.round(codePercentage), width: String(codePercentageFiltered)+"px", height: 10, backgroundColor: ds_colors[color_name] }}></Box>
-          <Box sx={{ mt: -0.5, position: "relative", left: String(-Math.round(codePercentageFiltered))+"px" }}>({codePercentageFiltered>-1?codePercentageFiltered:codePercentage}%)</Box>
+          <Box sx={{ mt: -0.5, position: "relative", left: String(-Math.round(codePercentageFiltered)+2)+"px" }}>({codePercentageFiltered>-1?codePercentageFiltered:codePercentage}%)</Box>
         </Box>
         {/* <Box sx={{ width: "100%", display: 'flex', flexDirection: 'row' }}>
           <Box sx={{ mt: -0.5 }}>({codePercentageFiltered}%)</Box>
@@ -100,4 +112,3 @@ export default function Code(props: ICode) {
 
   );
 }
-
