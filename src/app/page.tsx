@@ -11,7 +11,7 @@ import { PanelDesignSpace } from "./leftside/paneldesignspace";
 export default function Home() {
   return (
     <>
-      <Box sx={{ display: 'flex', height: '100vh', width: '100%', flexDirection: 'row' }}>
+      <Box sx={{ display: 'flex', height: '100vh', width: '100%', flexDirection: 'row', fontFamily:"sans-serif" }}>
         <ProtectionContextProvider>
 
           <DataContextProvider key="dataContext">
