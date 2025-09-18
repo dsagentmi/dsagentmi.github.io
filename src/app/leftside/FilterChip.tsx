@@ -12,13 +12,17 @@ interface IFilterChip {
 
 export default function FilterChip(props: IFilterChip) {
     const { filter } = props;
-    console.log("Rendering Filter Chip for filter: ", filter);
+  
     const { addOrRemoveCodeToFilter } = useDataContext();
     return (
         <>
             {filter && filter.dim && filter.cat && filter.code && (<>
 
-                <Box sx={{ display: 'flex', flexDirection: 'row', color: 'black', p: 0.5, border: '2px solid ' + (filter && filter.dim ? dimension_color_mapper(filter.dim) : "back"), borderRadius: 2, mr: 1, mb:1 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', color: 'black', p: 0.5, border: '2px solid ' + (filter && filter.dim ? dimension_color_mapper(filter.dim) : "back"), 
+                    
+                    backgroundColor: "rgb(from "+(filter && filter.dim ? dimension_color_mapper(filter.dim) : "back")+" r g b / .2)",
+                    
+                    borderRadius: 2, mr: 1, mb:1 }}>
                     <Box sx={{ display: 'flex', flexDirection: 'column', }}>
                         <Box sx={{ flex: 1 }}></Box>
                         <Box>{filter.cat + ": " + filter.code}</Box>
