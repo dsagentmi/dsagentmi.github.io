@@ -14,15 +14,15 @@ export default function FilterElement() {
 
 
     const getAllFilters=(filters:any)=>{
-      console.log("Current Filters: ", filters);
+    
         if(filters){
           let filterList:Ifilter[] = []
           Object.keys(filters).forEach(dim=>{
-            console.log("Dimension: ", dim);
+      
             Object.keys(filters[dim]).forEach((cat:any)=>{
-              console.log("Category: ", cat);
+       
               filters[dim][cat].forEach((code:any)=>{
-                console.log("Code: ", code);
+       
                 filterList.push({
                   dim:dim,
                   cat:cat,
@@ -36,8 +36,8 @@ export default function FilterElement() {
           return []
         }
     return (
-    <Box sx={{    p: 1, height:100, backgroundColor: '#f5f5f5', borderRadius: 1, mb:2, fontSize: 13 }}>
-        Active Filters:
+    <Box sx={{ flex:1,   p: 1, height:120, backgroundColor: '#f5f5f5', borderRadius: 1, mb:2, fontSize: 13 }}>
+        Active Agent Filters:
         <Box sx={{ flexDirection: 'row', display: 'flex', flexWrap: 'wrap' }}>
         
         {getAllFilters(currentFilters).map((f, idx) => (
